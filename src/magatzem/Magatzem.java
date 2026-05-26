@@ -7,52 +7,22 @@ public class Magatzem {
         this.articles = articles;
     }
 
+    private ActualitzadorArticle obtenirActualitzador(Article article) {
+        switch (article.nom) {
+            case NomArticle.FORMATGE_GIDURAT:
+                return new ActualitzadorFormatgeGidurat();
+            case NomArticle.MARTELL_DE_THOR:
+                return new ActualitzadorMartell();
+            case NomArticle.ENTRADES_CONCERT:
+                return new ActualitzadorEntrades();
+            default:
+                return new ActualitzadorNormal();
+        }
+    }
+
     public void actualitzarEstat() {
-        for (int i = 0; i < articles.length; i++) {
-            if (!articles[i].nom.equals("Formatge Gidurat")
-                    && !articles[i].nom.equals("Entrades per al Concert del Trobador")) {
-                if (articles[i].qualitat > 0) {
-                    if (!articles[i].nom.equals("Martell de Thor (Llegendari)")) {
-                        articles[i].qualitat = articles[i].qualitat - 1;
-                    }
-                }
-            } else {
-                if (articles[i].qualitat < 50) {
-                    articles[i].qualitat = articles[i].qualitat + 1;
-                    if (articles[i].nom.equals("Entrades per al Concert del Trobador")) {
-                        if (articles[i].diesPerVendre < 11) {
-                            if (articles[i].qualitat < 50) {
-                                articles[i].qualitat = articles[i].qualitat + 1;
-                            }
-                        }
-                        if (articles[i].diesPerVendre < 6) {
-                            if (articles[i].qualitat < 50) {
-                                articles[i].qualitat = articles[i].qualitat + 1;
-                            }
-                        }
-                    }
-                }
-            }
-            if (!articles[i].nom.equals("Martell de Thor (Llegendari)")) {
-                articles[i].diesPerVendre = articles[i].diesPerVendre - 1;
-            }
-            if (articles[i].diesPerVendre < 0) {
-                if (!articles[i].nom.equals("Formatge Gidurat")) {
-                    if (!articles[i].nom.equals("Entrades per al Concert del Trobador")) {
-                        if (articles[i].qualitat > 0) {
-                            if (!articles[i].nom.equals("Martell de Thor (Llegendari)")) {
-                                articles[i].qualitat = articles[i].qualitat - 1;
-                            }
-                        }
-                    } else {
-                        articles[i].qualitat = articles[i].qualitat - articles[i].qualitat;
-                    }
-                } else {
-                    if (articles[i].qualitat < 50) {
-                        articles[i].qualitat = articles[i].qualitat + 1;
-                    }
-                }
-            }
+        for (Article article : articles) {
+            obtenirActualitzador(article).actualitzar(article);
         }
     }
 }
